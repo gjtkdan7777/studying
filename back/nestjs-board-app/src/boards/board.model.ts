@@ -1,8 +1,8 @@
 export interface Board {
-  id: string;
-  name: string;
-  description: string;
-  status: BoardStatus;
+  id: string
+  title: string
+  description: string
+  status: BoardStatus
 }
 
 export enum BoardStatus {
