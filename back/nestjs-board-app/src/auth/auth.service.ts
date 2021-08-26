@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
 
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
@@ -17,7 +17,7 @@ export class AuthService {
   }
 
   async signIn(
-    authCredentialsDto: AuthCredentialsDto,
+    authCredentialsDto: AuthCredentialsDto
   ): Promise<{ accessToken: string }> {
     const { username, password } = authCredentialsDto
     const user = await this.userRepository.findOne({ username })
