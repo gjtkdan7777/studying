@@ -1,7 +1,7 @@
 import { CatRequestDto } from './dto/cats.request.dto';
 import { Cat } from './cats.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Injectable, HttpException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 
 @Injectable()
