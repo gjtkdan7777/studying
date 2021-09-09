@@ -1,6 +1,5 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { AuthModule } from './../auth/auth.module';
-
 import { MongooseModule } from '@nestjs/mongoose';
 import { CatsController } from './cats.controller';
 import { Cat, CatSchema } from './cats.schema';
