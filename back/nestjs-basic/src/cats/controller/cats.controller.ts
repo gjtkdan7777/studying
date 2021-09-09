@@ -1,36 +1,31 @@
-import { AuthService } from './../auth/auth.service';
-import { ReadOnlyCatDto } from './dto/cat.dto';
-import { CatsService } from './cats.service';
+import { Cat } from '../cats.schema';
+import { multerOptions } from '../../common/utils/multer.options';
 import {
   Body,
   Controller,
-  Delete,
   Get,
-  HttpException,
-  Logger,
-  Param,
-  ParseIntPipe,
-  Patch,
   Post,
-  Put,
-  Req,
+  UploadedFiles,
   UseFilters,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { AuthService } from '../../auth/auth.service';
+import { ReadOnlyCatDto } from '../dto/cat.dto';
+import { CatsService } from '../services/cats.service';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { CatRequestDto } from './dto/cats.request.dto';
+import { CatRequestDto } from '../dto/cats.request.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { LoginRequestDto } from 'src/auth/dto/login.request.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { CurrentUser } from 'src/common/decorators/user.decorator';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('cats')
 @UseInterceptors(SuccessInterceptor)
 @UseFilters(HttpExceptionFilter)
 export class CatsController {
-  private logger = new Logger('HTTP');
   constructor(
     private readonly catsService: CatsService,
     private readonly authService: AuthService,
@@ -65,8 +60,13 @@ export class CatsController {
   }
 
   @ApiOperation({ summary: '고양이 이미지 업로드' })
-  @Post('upload/cats')
-  uploadCatImg() {
-    return 'uploadImg';
+  @UseInterceptors(FilesInterceptor('image', 10, multerOptions('cats')))
+  @UseGuards(JwtAuthGuard)
+  @Post('upload')
+  uploadCatImg(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @CurrentUser() cat: Cat,
+  ) {
+    return this.catsService.uploadImg(cat, files);
   }
 }
