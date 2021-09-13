@@ -8,6 +8,13 @@ import * as bcrypt from 'bcrypt';
 export class CatsService {
   constructor(private readonly catsRepository: CatsRepository) {}
 
+  async getAllCat() {
+    const allCat = await this.catsRepository.findAll();
+    const readOnlyCats = allCat.map((cat) => cat.readOnlyData);
+
+    return readOnlyCats;
+  }
+
   async signUp(body: CatRequestDto) {
     const { email, name, password } = body;
     const isCatExist = await this.catsRepository.existsByEmail(email);
@@ -31,13 +38,11 @@ export class CatsService {
   async uploadImg(cat: Cat, files: Express.Multer.File[]) {
     const fileName = `cats/${files[0].filename}`;
 
-    console.log(fileName);
-
     const newCat = await this.catsRepository.findByIdAndUpdateImg(
       cat.id,
       fileName,
     );
-    console.log(newCat);
+
     return newCat;
   }
 }
