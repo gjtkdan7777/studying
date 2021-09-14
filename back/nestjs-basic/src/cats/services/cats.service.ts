@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { Cat } from '../cats.schema';
 import { CatsRepository } from '../cats.repository';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
@@ -10,8 +11,7 @@ export class CatsService {
 
   async getAllCat() {
     const allCat = await this.catsRepository.findAll();
-    const readOnlyCats = allCat.map((cat) => cat.readOnlyData);
-
+    const readOnlyCats = await allCat.map((cat) => cat.readOnlyData);
     return readOnlyCats;
   }
 
