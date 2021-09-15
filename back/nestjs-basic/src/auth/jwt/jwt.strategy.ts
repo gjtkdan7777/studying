@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (cat) {
       return cat;
     } else {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('접근 오류');
     }
   }
 }
